@@ -1,7 +1,6 @@
 # LaravelSqlines
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
-[![Build Status][ico-travis]][link-travis]
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Simple laravel package to manage the sync of databases over [Sqlines](http://www.sqlines.com/).
