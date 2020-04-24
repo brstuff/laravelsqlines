@@ -3,7 +3,6 @@
 namespace brstuff\LaravelSqlines;
 
 use File;
-use Storage;
 
 class LaravelSqlines
 {

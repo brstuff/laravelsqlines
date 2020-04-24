@@ -1,6 +1,6 @@
 {
     "name": "brstuff/laravelsqlines",
-    "description": ":Simple package to facilitate and automate the use of sqlines in Laravel 5.x using Sqlines",
+    "description": "Simple laravel package to manage the sync of databases over Sqlines",
     "license": "MIT",
     "authors": [
         {
@@ -10,7 +10,7 @@
         }
     ],
     "homepage": "https://github.com/brstuff/laravelsqlines",
-    "keywords": ["Laravel", "LaravelSqlines"],
+    "keywords": ["Laravel", "LaravelSqlines", "sqlines", "brstuff"],
     "require": {
         "illuminate/support": "~5|~6|~7"
     },
