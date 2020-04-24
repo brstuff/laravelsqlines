@@ -1,0 +1,43 @@
+{
+    "name": "brstuff/laravelsqlines",
+    "description": ":Simple package to facilitate and automate the use of sqlines in Laravel 5.x using Sqlines",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "BRStuff",
+            "email": "brstuff3000@gmail.com",
+            "homepage": "https://www.brstuff.com"
+        }
+    ],
+    "homepage": "https://github.com/brstuff/laravelsqlines",
+    "keywords": ["Laravel", "LaravelSqlines"],
+    "require": {
+        "illuminate/support": "~5|~6|~7"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0",
+        "mockery/mockery": "^1.1",
+        "orchestra/testbench": "~3|~4",
+        "sempro/phpunit-pretty-print": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "brstuff\\LaravelSqlines\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "brstuff\\LaravelSqlines\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "brstuff\\LaravelSqlines\\LaravelSqlinesServiceProvider"
+            ],
+            "aliases": {
+                "LaravelSqlines": "brstuff\\LaravelSqlines\\Facades\\LaravelSqlines"
+            }
+        }
+    }
+}
