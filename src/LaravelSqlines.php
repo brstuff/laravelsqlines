@@ -9,7 +9,7 @@ class LaravelSqlines
     private $files = [];
     private $sqlines_storage = "laravelsqlines";
     private $sqlines_app = "sqldata";
-    
+
     private $configOptions = [
         'sd',
         'td',
@@ -43,12 +43,12 @@ class LaravelSqlines
         'trace_data',
         'trace_diff_data',
     ];
-    
+
     /**
      *  todo:
      *  cmd
      *  queries
-     *  etc  
+     *  etc
      */
     private $options = [
         'source' => '',
@@ -60,20 +60,20 @@ class LaravelSqlines
         'topt' => [],
         'vopt' => '',
         'smap' => [],
-        'cmap' => [], 
+        'cmap' => [],
         'dtmap' => [],
         'tmap' => [],
         'queries' => [],    // TODO
         'twhere' => [],
         'tsel' => [],
         'tsel_all' => [],
-    ]; 
-    
+    ];
+
     private $connections = ['oracle','sql','db2','mariadb','mysql','pg','sybase','asa','informix'];
-    
+
     /**
      * Source
-     * 
+     *
      * @param string $connection (oracle|sql|db2|mariadb|mysql|pg|sybase|asa|informix)
      * @param string $host Host of database
      * @param string $username Username of database
@@ -87,7 +87,7 @@ class LaravelSqlines
         $this->options['source'] = $this->connectionString($connection, $username, $password, $database, $host, $port);
         return $this;
     }
-    
+
     /**
      * Target
      *
@@ -104,10 +104,10 @@ class LaravelSqlines
         $this->options['target'] = $this->connectionString($connection, $username, $password, $database, $host, $port);
         return $this;
     }
-    
+
     /**
      * sourceConnection
-     * 
+     *
      * @param string $connection (oracle|sql|db2|mariadb|mysql|pg|sybase|asa|informix)
      * @param string $database_config config database name
      * @return $this
@@ -117,7 +117,7 @@ class LaravelSqlines
         $this->source($connection, $cfg['username'],  $cfg['password'],  $cfg['database'],  $cfg['host'],  $cfg['port']);
         return $this;
     }
-    
+
     /**
      * targetConnection
      *
@@ -130,24 +130,24 @@ class LaravelSqlines
         $this->target($driver, $cfg['username'],  $cfg['password'],  $cfg['database'],  $cfg['host'],  $cfg['port']);
         return $this;
     }
-    
+
     /**
      * Tables to sync
-     * 
+     *
      * @param string|array $tables Can be single table, array of tables, or splited with commas
      * return $this
      */
     public function tables($tables){
         $tables = $this->textComasOrArray2Array($tables);
-        
-        if (empty($tables)) { 
-            throw new \Exception('Table(s) empty.'); 
+
+        if (empty($tables)) {
+            throw new \Exception('Table(s) empty.');
         }
-         
+
         $this->options['tables'] = array_merge($this->options['tables'], $tables);
         return $this;
     }
-    
+
     /**
      * Tables to excluded
      *
@@ -156,33 +156,33 @@ class LaravelSqlines
      */
     public function tables_excluded($tables){
         $tables = $this->textComasOrArray2Array($tables);
-        
-        if (empty($tables)) { 
-            throw new \Exception('Table(s) empty.'); 
+
+        if (empty($tables)) {
+            throw new \Exception('Table(s) empty.');
         }
-        
+
         $this->options['tables_excluded'] = array_merge($this->options['tables_excluded'], $tables);
         return $this;
     }
-    
+
     /**
      * CMD
-     * 
+     *
      * @param string $option Option can be transfer, validate or assess
      * @throws \Exception
      * @return $this
      */
     public function cmd($option){
         $option = strtolower($option);
-        
-        if (in_array($option, ['transfer', 'validate', 'assess'])) { 
-            throw new \Exception('The cmd need to be transfer, validate or assess.'); 
+
+        if (in_array($option, ['transfer', 'validate', 'assess'])) {
+            throw new \Exception('The cmd need to be transfer, validate or assess.');
         }
-        
+
         $this->options['command'] = $option;
         return $this;
     }
-    
+
     /**
      * topt
      *
@@ -190,19 +190,19 @@ class LaravelSqlines
      */
     public function topt($actions){
         $options = ['create','recreate','truncate','pnone'];
-        
+
         $actions = $this->textComasOrArray2Array($actions);
-        
+
         $actions = array_unique(array_intersect($actions, $options));
-        
+
         if (empty($actions)) {
             throw new \Exception('topt empty.');
         }
-        
+
         $this->options['topt'] = $actions;
         return $this;
     }
-    
+
     /**
      * vopt
      *
@@ -211,53 +211,53 @@ class LaravelSqlines
      */
     public function vopt($option){
         $option = strtolower($option);
-        
+
         if (in_array($option, ['rowcount', 'rows'])) {
             throw new \Exception('The vopt need to be rowcount or rows.');
         }
-        
+
         $this->options['vopt'] = $option;
         return $this;
     }
-    
-    
-    
+
+
+
     /**
      * SMAP
      * option specifies the schema name mapping. For example, if you are migrating all tables from schema scott in Oracle, and want to move them to dbo schema in SQL Server, specify -smap = scott:dbo
-     * 
+     *
      * @throws \Exception
      * @return $this
      */
     public function smap($text){
         $text = $this->textComasOrArray2Array($text);
-        
+
         if (empty($text)) {
             throw new \Exception('smap empty.');
         }
-        
+
         $this->options['smap'] = array_merge($this->options['smap'], $text);
         return $this;
     }
-    
+
     /**
      * cmap
-     * option specifies an ASCII file containing a column name and data type mapping. 
+     * option specifies an ASCII file containing a column name and data type mapping.
      *
      * @throws \Exception
      * @return $this
      */
     public function cmap($text){
         $text = is_array($text) ? $text : [$text];
-        
+
         if (empty($text)) {
             throw new \Exception('cmap empty.');
         }
-        
+
         $this->options['cmap'] = array_merge($this->options['cmap'], $text);
         return $this;
     }
-    
+
     /**
      * dtmap
      * option specifies an ASCII file containing a column name and data type mapping.
@@ -267,16 +267,16 @@ class LaravelSqlines
      */
     public function dtmap($text){
         $text = is_array($text) ? $text : [$text];
-        
+
         if (empty($text)) {
             throw new \Exception('dtmap empty.');
         }
-        
+
         $this->options['dtmap'] = array_merge($this->options['dtmap'], $text);
         return $this;
     }
-    
-    
+
+
     /**
      * tmap
      * Table name mapping file. Example:
@@ -287,58 +287,58 @@ class LaravelSqlines
      */
     public function tmap($text){
         $text = is_array($text) ? $text : [$text];
-        
+
         if (empty($text)) {
             throw new \Exception('tmap empty.');
         }
-        
+
         $this->options['tmap'] = array_merge($this->options['tmap'], $text);
         return $this;
     }
-    
-    
+
+
     /**
      * queries
-     * SQL SELECT queries 
+     * SQL SELECT queries
      *
      * @throws \Exception
      * @return $this
      */
     public function queries($text){
         $text = is_array($text) ? $text : [$text];
-        
+
         if (empty($text)) {
             throw new \Exception('queries empty.');
         }
-        
+
         $this->options['queries'] = array_merge($this->options['queries'], $text);
         return $this;
     }
-    
-    
+
+
     /**
      * twhere
-     * 
+     *
      * WHERE conditions for tables. Example :
-     * SALES.ORDERS, created_dt >= CURRENT_DATE; 
+     * SALES.ORDERS, created_dt >= CURRENT_DATE;
      *
      * @throws \Exception
      * @return $this
      */
     public function twhere($text){
         $text = is_array($text) ? $text : [$text];
-        
+
         if (empty($text)) {
             throw new \Exception('twhere empty.');
         }
-        
+
         $this->options['twhere'] = array_merge($this->options['twhere'], $text);
         return $this;
     }
-    
+
     /**
      * tsel
-     * 
+     *
      * Select expressions for tables. Example:
      * SALES.CONTACTS, NAME, SUBSTR(CREATED_DT, 1, 10) AS CREATED_DT, 'HQ OFFICE' AS OFFICE;
      *
@@ -347,46 +347,46 @@ class LaravelSqlines
      */
     public function tsel($text){
         $text = is_array($text) ? $text : [$text];
-        
+
         if (empty($text)) {
             throw new \Exception('tsel empty.');
         }
-        
+
         $this->options['tsel'] = array_merge($this->options['tsel'], $text);
         return $this;
     }
-    
+
     /**
      * tsel_all
-     * 
+     *
      * Select expressions for all tables (not applied for tables defined in sqlines_tsel). Example:
-     * *, 'NA REGION' AS REGION;   
+     * *, 'NA REGION' AS REGION;
      *
      * @throws \Exception
      * @return $this
      */
     public function tsel_all($text){
         $text = is_array($text) ? $text : [$text];
-        
+
         if (empty($text)) {
             throw new \Exception('tsel_all empty.');
         }
-        
+
         $this->options['tsel_all'] = array_merge($this->options['tsel_all'], $text);
         return $this;
     }
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     public function sync(){
         $export_paths = "";
-        $sqlines_path = storage_path($this->sqlines_storage)."/";
+        $sqlines_path = storage_path($this->sqlines_storage);
         $tmp_prefix = uniqid("tmp_");
 
-        
+
         $this->files = [
             'app'       => $this->sqlines_storage."/".$this->sqlines_app,
             'cfg'       => $this->sqlines_storage."/".$tmp_prefix."_cfg.tmp",
@@ -398,7 +398,7 @@ class LaravelSqlines
             'tsel'      => $this->sqlines_storage."/".$tmp_prefix."_tsel.tmp",
             'tsel_all'  => $this->sqlines_storage."/".$tmp_prefix."_tsel_all.tmp",
         ];
-        
+
         if (empty($this->options['source'])) {
             throw new \Exception('Source is empty.');
         }
@@ -408,15 +408,15 @@ class LaravelSqlines
         if (empty($this->options['tables'])) {
             throw new \Exception('Tables is empty.');
         }
-            
+
         if(!File::exists(storage_path($this->files['app']))) {
             throw new \Exception('SQlines App not present in: '.storage_path($this->files['app'])."\nTry run: php artisan vendor:publish --tag=laravelsqlines.app");
         }
-        
+
         if(!empty(config('laravelsqlines.export_paths'))){
             $export_paths = sprintf('export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:%s; ', config('laravelsqlines.export_paths'));
         }
-        
+
         $options = [];
         $options[] = $this->option2File("tmap", "tmapf");
         $options[] = $this->option2File("cmap", "cmapf");
@@ -425,28 +425,29 @@ class LaravelSqlines
         $options[] = $this->option2File("cnsmap", "cnsmapf");
         $options[] = $this->option2File("tsel_all", "tsel_allf");
         $options = array_filter($options);
-        
+
         $this->config2File($options);
-        $conn = sprintf("%s %s -cfg=%s", $export_paths, storage_path($this->files['app']), storage_path($this->files['cfg']));
+        $conn = sprintf("cd %s; %s %s -cfg=%s", $sqlines_path, $export_paths, storage_path($this->files['app']), storage_path($this->files['cfg']));
+
         $log = shell_exec($conn);
         $this->deleteTmp();
         return $log;
     }
-    
+
     private function config2File($optionsfiles = []){
         $config = array_filter(config('laravelsqlines.data-options'));
         $config['sd'] = $this->options['source'];
         $config['td'] = $this->options['target'];
-        
+
         $cfg_content = empty($optionsfiles) ?  "" : implode(" \n", $optionsfiles)."\n";
         foreach ($config as $key => $value){
             $cfg_content .= sprintf("-%s=%s \n", $key, $value);
         }
-        
+
         $file = storage_path($this->files['cfg']);
         file_put_contents($file, $cfg_content);
     }
-    
+
     private function option2File($option, $optionf){
         if(!empty($this->options[$option])){
             file_put_contents(storage_path($this->files[$option]), implode("\n", $this->options[$option]));
@@ -454,8 +455,8 @@ class LaravelSqlines
         }
         return "";
     }
-    
-    
+
+
     private function textComasOrArray2Array($text){
         if(is_array($text)){
             $array = $text;
@@ -466,41 +467,41 @@ class LaravelSqlines
         }
         return $array;
     }
-    
+
     private function deleteTmp(){
         $sqlines_path = storage_path($this->sqlines_storage)."/";
         array_map('unlink', glob( $sqlines_path."*.{tmp,txt,sql,log}", GLOB_BRACE));
     }
-    
-    
+
+
     private function connectionString($connection, $username, $password = "", $database, $host = "", $port="")
     {
         if (!in_array($connection, $this->connections)) {
             throw new \Exception('Invalid type of connection.');
         }
-        
+
         switch ($connection){
             case 'oracle':
                 $host = empty($port) ? $host : $host.':'.$port;
                 $credentials = empty($password) ? $username : $username."/".$password;
                 $connection_string = sprintf("%s, %s@%s/%s", $connection, $credentials, $host, $database);
                 break;
-                
+
             case 'asa':
             case 'db2':
                 $credentials = empty($password) ? $username : $username."/".$password;
                 $connection_string = sprintf("%s, %s@%s", $connection, $credentials, $database);
                 break;
-                
+
             default:
                 $host = empty($port) ? $host : $host.':'.$port;
                 $credentials = empty($password) ? $username : $username."/".$password;
                 $connection_string = sprintf("%s, %s@%s,%s", $connection, $credentials, $host, $database);
                 break;
         }
-        
+
         return $connection_string;
     }
-    
-    
+
+
 }
