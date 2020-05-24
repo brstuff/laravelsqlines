@@ -438,6 +438,7 @@ class LaravelSqlines
         $config = array_filter(config('laravelsqlines.data-options'));
         $config['sd'] = $this->options['source'];
         $config['td'] = $this->options['target'];
+        $config['smap'] = implode(",", $this->options['smap']);
 
         $cfg_content = empty($optionsfiles) ?  "" : implode(" \n", $optionsfiles)."\n";
         foreach ($config as $key => $value){
