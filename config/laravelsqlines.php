@@ -7,6 +7,8 @@ return [
     // ex: /usr/lib64/mysql/:/usr/lib/oracle/10.2.0.5/client64/lib/
     'export_paths' => '',
 
+    // export NLS_LANG
+    'export_nls_lang' => false,
 
 
     // SQLines Data options

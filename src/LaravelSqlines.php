@@ -382,7 +382,6 @@ class LaravelSqlines
 
 
     public function sync(){
-        $export_paths = "";
         $sqlines_path = storage_path($this->sqlines_storage);
         $tmp_prefix = uniqid("tmp_");
 
@@ -413,8 +412,13 @@ class LaravelSqlines
             throw new \Exception('SQlines App not present in: '.storage_path($this->files['app'])."\nTry run: php artisan vendor:publish --tag=laravelsqlines.app");
         }
 
+        $exports = "";
         if(!empty(config('laravelsqlines.export_paths'))){
-            $export_paths = sprintf('export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:%s; ', config('laravelsqlines.export_paths'));
+            $exports .= sprintf('export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:%s; ', config('laravelsqlines.export_paths'));
+        }
+
+        if(config('laravelsqlines.export_nls_lang') === true){
+            $exports .= sprintf(' export NLS_LANG=%s;', config('laravelsqlines.data-options.oracle_nls_lang'));
         }
 
         $options = [];
@@ -427,7 +431,7 @@ class LaravelSqlines
         $options = array_filter($options);
 
         $this->config2File($options);
-        $conn = sprintf("cd %s; %s %s -cfg=%s", $sqlines_path, $export_paths, storage_path($this->files['app']), storage_path($this->files['cfg']));
+        $conn = sprintf("cd %s; %s; %s -cfg=%s", $sqlines_path, $exports, storage_path($this->files['app']), storage_path($this->files['cfg']));
 
         $log = shell_exec($conn);
         $this->deleteTmp();
