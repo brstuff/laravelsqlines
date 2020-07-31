@@ -431,7 +431,7 @@ class LaravelSqlines
         $options = array_filter($options);
 
         $this->config2File($options);
-        $conn = sprintf("cd %s; %s; %s -cfg=%s", $sqlines_path, $exports, storage_path($this->files['app']), storage_path($this->files['cfg']));
+        $conn = sprintf("cd %s; %s %s -cfg=%s", $sqlines_path, $exports, storage_path($this->files['app']), storage_path($this->files['cfg']));
 
         $log = shell_exec($conn);
         $this->deleteTmp();
